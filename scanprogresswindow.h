@@ -25,6 +25,7 @@ private:
     void StartTimer();
     int fileCount;
     int checkCount;
+    bool isPizdabol;
 };
 
 #endif // SCANPROGRESSWINDOW_H

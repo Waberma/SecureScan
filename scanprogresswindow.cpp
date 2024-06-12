@@ -12,23 +12,27 @@ ScanProgressWindow::ScanProgressWindow(QWidget *parent)
     CreateForm();
     checkCount = 0;
     fileCount = 500;
+    isPizdabol = false;
     qDebug() << "Сканирование";
     StartTimer();
 }
 
 void ScanProgressWindow::closeEvent(QCloseEvent* event)
 {
-    pizdabolRasFinish();
-    event->accept();
+    if(!isPizdabol)
+    {
+        pizdabolRasFinish();
+        event->accept();
+    }
 }
 
 ScanProgressWindow::ScanProgressWindow(QWidget *parent, QString dirPath)
 {
     CreateForm();
     qDebug() << "Тестовое сканирование";
-
-    QDir directory(dirPath);
+    isPizdabol = false;
     checkCount = 0;
+    QDir directory(dirPath);
     QStringList files = directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
     fileCount = files.size();
     StartTimer();
@@ -47,6 +51,7 @@ void ScanProgressWindow::timerForPizdabolTimeOut()
     {
         scanProgressBar->setValue(100);
         QMessageBox::information(this, "Сканер безопасноти", "Проверка " + QString::number(fileCount) + " файлов завершена!");
+        isPizdabol = true;
         pizdabolFinish();
         this->close();
     }
